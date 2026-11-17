@@ -31,6 +31,11 @@ class ForecastTests(unittest.TestCase):
     def test_deterministic(self):
         case=sample_case()
         self.assertEqual(main.forecast(case),main.forecast(case))
+    def test_accepts_zero_first_hour_count(self):
+        case=sample_case(); case["known"]["viewers"]=0
+        result=main.forecast(case)
+        self.assertEqual(len(result["hours"]),23)
+        self.assertTrue(all(all(q>0 for q in row["q"]) for row in result["hours"]))
     def test_rejects_missing_hour(self):
         case=sample_case(); case["forecast"]=case["forecast"][:-1]
         with self.assertRaises(ValueError): main.forecast(case)

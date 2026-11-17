@@ -6,6 +6,9 @@ from datetime import datetime
 LEVELS = (0.05, 0.25, 0.5, 0.75, 0.95)
 NORMAL_Z = (-1.645, -0.674, 0.0, 0.674, 1.645)
 SIMILARITY_BANDWIDTH = 0.75
+EMPIRICAL_WEIGHT = 0.80
+EMPIRICAL_SCALE = 1.20
+PERSISTENCE_WEIGHT = 0.20
 
 def positive(value):
     try:
@@ -133,7 +136,8 @@ def forecast(case):
         for tau, z in zip(LEVELS, NORMAL_Z):
             if ratios:
                 empirical = weighted_quantile(ratios, weights, tau)
-                log_ratio = 0.96 * empirical + 0.04 * (z * 0.15 * math.sqrt(rel))
+                log_ratio = (EMPIRICAL_WEIGHT * EMPIRICAL_SCALE * empirical
+                             + PERSISTENCE_WEIGHT * (z * 0.15 * math.sqrt(rel)))
             else:
                 log_ratio = z * 0.15 * math.sqrt(rel)
             value = first * math.exp(max(-12.0, min(12.0, log_ratio)))

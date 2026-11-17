@@ -26,8 +26,12 @@ def timestamp(value):
 def validate_case(case):
     if not isinstance(case,dict): raise ValueError("case must be a JSON object")
     known=case.get("known")
-    if not isinstance(known,dict) or positive(known.get("viewers")) is None:
-        raise ValueError("known.viewers must be a positive number")
+    try:
+        known_viewers=float(known.get("viewers")) if isinstance(known,dict) else float("nan")
+    except (TypeError,ValueError):
+        known_viewers=float("nan")
+    if not math.isfinite(known_viewers) or known_viewers<0:
+        raise ValueError("known.viewers must be a finite non-negative number")
     forecast_rows=case.get("forecast")
     if not isinstance(forecast_rows,list) or len(forecast_rows)!=23:
         raise ValueError("forecast must contain exactly 23 rows")

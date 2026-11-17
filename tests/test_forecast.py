@@ -9,7 +9,7 @@ def sample_case():
       "day_start":"2026-11-19T00:00:00Z","checkpoint":"2026-11-19T01:00:00Z",
       "levels":[0.05,0.25,0.5,0.75,0.95],
       "known":{"hour":1,"from":"2026-11-19T00:00:00Z","until":"2026-11-19T01:00:00Z","viewers":100000,"channels":500,"reads":60},
-      "forecast":[{"hour":h,"from":f"2026-11-19T{h-1:02d}:00:00Z","until":f"2026-11-19T{h:02d}:00:00Z"} for h in range(2,25)],
+      "forecast":[{"hour":h,"from":f"2026-11-19T{h-1:02d}:00:00Z","until":("2026-11-20T00:00:00Z" if h==24 else f"2026-11-19T{h:02d}:00:00Z")} for h in range(2,25)],
       "history":[{"at":"2026-11-18T23:59:00Z","viewers":90000,"channels":400}],
       "history_hourly":[],"streams":[{"login":"sample","viewers":12000,"language":"en","started_at":"2026-11-19T00:10:00Z"}],
       "categories_hourly":[],

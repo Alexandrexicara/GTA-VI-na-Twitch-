@@ -1,15 +1,28 @@
-name: Python smoke test
+name: Python 3.13 tests
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  smoke:
+  tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: python tests/smoke.py
+      - name: Unit and contract tests
+        run: python -m unittest discover -s tests -v
+      - name: Legacy smoke test
+        run: python tests/smoke.py
+      - name: End-to-end CLI test
+        run: |
+          mkdir -p /tmp/makefun-input /tmp/makefun-output
+          cp example-case.in /tmp/makefun-input/smoke.in
+          MAKEFUN_INPUT_DIR=/tmp/makefun-input MAKEFUN_OUTPUT_DIR=/tmp/makefun-output python main.py
+          python -c "import json; x=json.load(open('/tmp/makefun-output/smoke.out')); assert len(x['hours']) == 23"

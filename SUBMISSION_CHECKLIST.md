@@ -14,11 +14,11 @@ Competition: https://make.fun/bounty/gta6-twitch-ccu-forecast-01
 - [x] Each official input produced a valid output with exactly 23 rows (hours 2–24), five ordered positive quantiles per row, and all values within the output limit.
 - [x] The four-case run completed in under one second in the available Python 3.11 environment.
 - [x] All 10 repository unit/CLI tests passed in Python 3.13.5 during the 2026-11-18 review; the updated smoke test also passed.
+- [x] Browser baseline correction checked with Node.js 22: comparable alignment uses `day_start`, ignores descriptive `unlock`, and excludes GTA VI pre-release category history. The browser remains a separate experimental baseline and is not the official Python engine.
 - [x] Netlify production deployment is ready: https://gta-tuch.netlify.app
 
 ## Not yet verified
 
-- [x] Browser baseline correction checked with Node.js 22: comparable alignment uses `day_start`, ignores descriptive `unlock`, and excludes GTA VI pre-release category history. The browser remains a separate experimental baseline and is not the official Python engine.
 
 - [ ] Official Make.fun practice scores. The downloaded practice inputs contain the forecast inputs, but the expected future-hour answers are held by the Make.fun grader. A local run cannot calculate the official practice score.
 - [ ] GitHub Actions runner execution. Recent workflow runs ended before any job steps were recorded (zero steps / no runner assigned), so the successful local Python 3.13.5 test run is the available verification; the Actions runner itself remains unverified.

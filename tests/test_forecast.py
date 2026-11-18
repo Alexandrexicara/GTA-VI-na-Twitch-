@@ -33,6 +33,9 @@ class ForecastTests(unittest.TestCase):
         profiles=main.comparable_profiles(case)
         self.assertEqual(len(profiles),1)
         self.assertEqual(profiles[0]["base"],10000)
+    def test_declining_comparable_can_forecast_below_first_hour(self):
+        result=main.forecast(sample_case())
+        self.assertLess(result["hours"][0]["q"][2],100000)
     def test_comparable_changes_forecast(self):
         case=sample_case()
         with_analogue=main.forecast(case)

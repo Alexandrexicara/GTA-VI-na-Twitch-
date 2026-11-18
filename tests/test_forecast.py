@@ -28,6 +28,24 @@ class ForecastTests(unittest.TestCase):
             self.assertEqual(len(row["q"]),5)
             self.assertTrue(all(0<q<=1_000_000_000 for q in row["q"]))
             self.assertEqual(row["q"],sorted(row["q"]))
+    def test_comparable_uses_day_start_not_descriptive_unlock(self):
+        case=sample_case()
+        profiles=main.comparable_profiles(case)
+        self.assertEqual(len(profiles),1)
+        self.assertEqual(profiles[0]["base"],10000)
+    def test_comparable_changes_forecast(self):
+        case=sample_case()
+        with_analogue=main.forecast(case)
+        case["comparables"]=[]
+        without_analogue=main.forecast(case)
+        self.assertNotEqual(
+            [row["q"] for row in with_analogue["hours"]],
+            [row["q"] for row in without_analogue["hours"]]
+        )
+    def test_excludes_gta_vi_pre_release_category_comparable(self):
+        case=sample_case()
+        case["comparables"][0]["name"]="Grand Theft Auto VI category before release"
+        self.assertEqual(main.comparable_profiles(case),[])
     def test_deterministic(self):
         case=sample_case()
         self.assertEqual(main.forecast(case),main.forecast(case))

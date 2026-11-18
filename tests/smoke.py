@@ -6,17 +6,23 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 case = {
+    "day_start": "2026-11-19T00:00:00Z",
     "known": {"viewers": 100000, "channels": 500},
     "streams": [{"viewers": 20000}, {"viewers": 10000}],
     "comparables": [{
-        "unlock": "2026-11-19T00:00:00Z",
+        "name": "Synthetic launch",
+        "day_start": "2026-01-01T00:00:00Z",
+        "unlock": "Midnight local release; descriptive text, not a timestamp",
         "hourly": [
-            {"from": f"2026-11-{19 + i // 24:02d}T{i % 24:02d}:00:00Z", "viewers": 100000 * (0.98 ** i)}
+            {"from": f"2026-01-{1 + i // 24:02d}T{i % 24:02d}:00:00Z",
+             "viewers": 100000 * (0.98 ** i)}
             for i in range(25)
         ],
     }],
     "forecast": [{"hour": h} for h in range(2, 25)],
 }
+profiles = module.comparable_profiles(case)
+assert len(profiles) == 1, "day_start must anchor the comparable; unlock is descriptive text"
 result = module.forecast(case)
 assert len(result["hours"]) == 23
 assert [row["hour"] for row in result["hours"]] == list(range(2, 25))
@@ -24,4 +30,4 @@ for row in result["hours"]:
     assert len(row["q"]) == 5
     assert all(isinstance(x, (int, float)) and x > 0 for x in row["q"])
     assert row["q"] == sorted(row["q"])
-print("PASS: 23 hours, five positive ordered quantiles per hour")
+print("PASS: comparable aligned by day_start; 23 hours and five positive ordered quantiles per hour")

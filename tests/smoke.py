@@ -26,6 +26,7 @@ assert len(profiles) == 1, "day_start must anchor the comparable; unlock is desc
 result = module.forecast(case)
 assert len(result["hours"]) == 23
 assert [row["hour"] for row in result["hours"]] == list(range(2, 25))
+assert result["hours"][0]["q"][2] < 100000, "declining comparable should allow a lower median forecast"
 for row in result["hours"]:
     assert len(row["q"]) == 5
     assert all(isinstance(x, (int, float)) and x > 0 for x in row["q"])

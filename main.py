@@ -130,7 +130,7 @@ def forecast(case):
                 continue
             distance = abs(math.log(profile["base"] / first))
             weight = math.exp(-distance / SIMILARITY_BANDWIDTH)
-            ratios.append(math.log(max(1.0, value / profile["base"])))
+            ratios.append(math.log(value / profile["base"]))
             weights.append(weight)
         qs = []
         for tau, z in zip(LEVELS, NORMAL_Z):
